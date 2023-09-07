@@ -1,0 +1,42 @@
+import { Component, OnInit } from '@angular/core';
+import { ContactService } from '../contact.service';
+import { Contact } from '../contact';
+import { response } from 'express';
+import { NgModel } from '@angular/forms';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-create-contact',
+  templateUrl: './create-contact.component.html',
+  styleUrls: ['./create-contact.component.css']
+})
+export class CreateContactComponent implements OnInit{
+
+  ngOnInit(): void { }
+
+    contact:Contact=new Contact();
+
+    constructor(private contactService:ContactService,
+    private router:Router) { }
+
+    onSubmit(){
+      console.log(this.contact);
+      this.saveContact();
+    }
+    saveContact(){
+      this.contactService.createContact(this.contact).subscribe(
+        data=>{
+          console.log("SUCCESSFULL........");
+          console.log(data);
+          this.redirectToContactList();
+        },
+        error=>{
+          console.log("FAILED........");
+          console.log(error);
+        }
+      );
+    }
+    redirectToContactList(){
+      this.router.navigate(['/contacts']);
+    }
+}
